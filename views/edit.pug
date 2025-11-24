@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 Edit
+
+  form(action=`/update/${todo.id}` method="POST")
+    label(for="task") Task:
+    input(type="text", name="task", value=todo.task, required)
+
+    br
+
+    label
+      input(type="checkbox", name="completed", checked=todo.completed)
+      | Completed
+
+    br
+
+    button(type="submit") Save

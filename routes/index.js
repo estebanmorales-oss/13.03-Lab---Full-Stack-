@@ -53,4 +53,42 @@ router.post('/delete', function (req, res, next) {
     }
 });
 
+/* This will edit */
+router.get('/edit/:id', function (req, res) {
+  const id = req.params.id;
+
+  req.db.query('SELECT * FROM todos WHERE id = ?;', [id], (err, results) => {
+    if (err) {
+      console.error('Error finding todo:', err);
+      return res.status(500).send('Error finding todo');
+    }
+
+
+    res.render('edit', { todo: results[0] });
+  });
+});
+
+/*Updates information */
+router.post('/update/:id', function (req, res) {
+  const id = req.params.id;            
+  const { task, completed } = req.body; 
+  
+  const isDone = completed === 'on';
+
+  req.db.query(
+    'UPDATE todos SET task = ?, completed = ? WHERE id = ?;',
+    [task, isDone, id],
+    (err, results) => {
+      if (err) {
+        console.error('Error updating todo:', err);
+        return res.status(500).send('Error updating todo');
+      }
+
+
+      res.redirect('/');
+    }
+  );
+});
+
+
 module.exports = router;
